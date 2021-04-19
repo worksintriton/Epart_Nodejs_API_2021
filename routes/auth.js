@@ -1,37 +1,41 @@
 var express = require('express');
 var router = express.Router();
+var jwt = require('jsonwebtoken');
+var pool = require('../config/db');
+var multer = require('multer');
 
-var customerModel = require('./../models/customer.model');
+router.post('/login',(req,res)=>{
+  var email = req.body.email;
+  var password = req.body.password;
+  var user = {
+      name:email,
+      pass:password
+  };
+  var ticket;
+  
+  jwt.sign({users:user},'EPARTS_2021',(err,token)=>{
+      ticket=token;
+  });
 
-router.post('/login', async (req,res)=>{
-    var loginUser = {
-        username: req.body.username,
-        password: req.body.password,
-    };
-
-    if ((loginUser.username == null || loginUser.username == undefined || loginUser.username =='') || (loginUser.password == null || loginUser.password == undefined || loginUser.password =='')) {
-        res.json({ success: false, msg: "Please enter a Username and Password" });
-    }else{
-        const inputvalue = loginUser.username;
-        console.log(inputvalue.match("^[0-9]*$"));
-        if(inputvalue.match("^[0-9]*$")){
-            let customerExists = await customerModel.findOne({mobile:req.body.username,password:req.body.password});
-
-            if (customerExists) {
-                res.json({ success: true, msg:"succesfully logged in", data:customerExists});
-            } else {
-                res.json({ success: false, msg: "Incorrect username or password" });
-            }
-        }else{
-            let customerExists = await customerModel.findOne({email:req.body.username,password:req.body.password});
-
-            if (customerExists) {
-                res.json({ success: true, msg:"succesfully logged in", data:customerExists});
-            } else {
-                res.json({ success: false, msg: "Incorrect username or password" });
-            }
-        }
+  var login_query ={
+      name:'validate-user',
+      text: 'SELECT * FROM public.login where email= $1  AND password= $2 ;',
+      values: [email, password]
     }
+      pool.query(login_query,(err, resq) => {
+        if (err) {
+          console.log(err.stack);
+          res.json({ success: false, msg: "Error in database" });
+        } else {
+          if (resq.rowCount)
+          {
+            res.json({ success: true, msg:"succesfully logged in",token:ticket, data:resq.rows});
+          }
+          else{
+            res.json({ success: false, msg: "Incorrect username or password" });
+          }
+        }
+      });
 });
 
 module.exports = router;
