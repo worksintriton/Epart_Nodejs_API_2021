@@ -12,7 +12,6 @@ router.post('/login',(req,res)=>{
       pass:password
   };
   var ticket;
-  
   jwt.sign({users:user},'EPARTS_2021',(err,token)=>{
       ticket=token;
   });
