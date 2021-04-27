@@ -3,13 +3,13 @@ var router = express.Router();
 var pool = require('../config/db');
 
 router.post('/create',(req,res)=>{
-    var city = req.body.name;
-    var state = req.body.state;
-    var city_query ={
-        text: 'INSERT INTO city (name, state) VALUES ($1,$2);',
-        values: [city,state]
+    var userType = req.body.name;
+    var status = req.body.status;
+    var userType_query ={
+        text: 'INSERT INTO userType (name,status) VALUES ($1,$2);',
+        values: [userType, status]
       }
-      pool.query (city_query,(err,req)=>{
+      pool.query (userType_query,(err,req)=>{
         if (err) {
           console.log(err.stack);
           res.json({ success: false, msg: "Error in database" });
@@ -19,14 +19,14 @@ router.post('/create',(req,res)=>{
       })  
 });
 router.put('/update/:id',(req,res)=>{
-    var city = req.body.name;
-    var state = req.body.state;
+    var userType = req.body.name;
+    var status = req.body.status;
     var id = req.params.id;
-    var city_query ={
-        text: 'UPDATE city SET name=$1  state=$2 WHERE id = $3;',
-        values: [city, state, id]
+    var userType_query ={
+        text: 'UPDATE userType SET name=$1 status=$2  WHERE id = $3;',
+        values: [userType, status, id]
       }
-      pool.query (city_query,(err,req)=>{
+      pool.query (userType_query,(err,req)=>{
         if (err) {
           console.log(err.stack);
           res.json({ success: false, msg: "Error in database" });
@@ -38,11 +38,11 @@ router.put('/update/:id',(req,res)=>{
 });
 router.delete('/delete/:id',(req,res)=>{
     var id = req.params.id;
-    var city_query ={
-        text: 'DELETE FROM city WHERE id= $1',
+    var userType_query ={
+        text: 'DELETE FROM userType WHERE id= $1',
         values: [id]
       }
-      pool.query (city_query,(err,req)=>{
+      pool.query (userType_query,(err,req)=>{
         if (err) {
           console.log(err.stack);
           res.json({ success: false, msg: "Error in database" });
@@ -52,10 +52,10 @@ router.delete('/delete/:id',(req,res)=>{
       })  
 });
 router.get('/getlist',(req,res)=>{
-    var city_query ={
-        text: 'SELECT *  FROM city',
+    var userType_query ={
+        text: 'SELECT *  FROM userType',
       }
-      pool.query (city_query,(err,req)=>{
+      pool.query (userType_query,(err,req)=>{
         if (err) {
           console.log(err.stack);
           res.json({ success: false, msg: "Error in database" });
@@ -67,11 +67,11 @@ router.get('/getlist',(req,res)=>{
 });
 router.get('/getby_id/:id',(req,res)=>{
     var id = req.params.id;
-    var city_query ={
-        text: 'SELECT *  FROM city WHERE id = $1',
+    var userType_query ={
+        text: 'SELECT *  FROM userType WHERE id = $1',
         values: [id]
       }
-      pool.query (city_query,(err,req)=>{
+      pool.query (userType_query,(err,req)=>{
         if (err) {
           console.log(err.stack);
           res.json({ success: false, msg: "Error in database" });

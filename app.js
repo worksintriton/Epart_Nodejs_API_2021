@@ -19,7 +19,10 @@ const country = require('./routes/country');
 const state = require('./routes/state');
 const city = require('./routes/city');
 const payout = require('./routes/payout-schdule');
-const currency = require('./routes/currency')
+const currency = require('./routes/currency');
+const productType = require('./routes/product-type');
+const reason = require('./routes/reason');
+const usertype = require('./routes/user_type');
 
 app.use('/auth', auth);
 app.use('/buyer_management', buyerManagement);
@@ -30,6 +33,10 @@ app.use('/state', state);
 app.use('/city', city);
 app.use('/payout', payout);
 app.use('/currency', currency);
+app.use('/productType', productType);
+app.use('/reason', reason);
+app.use('/userType', usertype)
+
 
 server.listen(port,function(err){
     if(err) 
