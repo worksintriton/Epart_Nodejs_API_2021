@@ -36,6 +36,9 @@ app.use('/currency', currency);
 app.use('/productType', productType);
 app.use('/reason', reason);
 app.use('/userType', usertype)
+app.use('/api/auth', auth);
+app.use('/api/buyer_management', buyerManagement);
+app.use('/api/buyer_details', buyerDetails);
 
 
 server.listen(port,function(err){
