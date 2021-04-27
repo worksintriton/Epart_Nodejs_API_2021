@@ -23,6 +23,7 @@ const currency = require('./routes/currency');
 const productType = require('./routes/product-type');
 const reason = require('./routes/reason');
 const usertype = require('./routes/user_type');
+const tradingtype = require('./routes/tradingType');
 
 app.use('/auth', auth);
 app.use('/buyer_management', buyerManagement);
@@ -36,7 +37,7 @@ app.use('/currency', currency);
 app.use('/productType', productType);
 app.use('/reason', reason);
 app.use('/userType', usertype)
-
+app.use('/tradingType', tradingtype);
 
 server.listen(port,function(err){
     if(err) 
