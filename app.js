@@ -36,8 +36,9 @@ app.use('/payout', payout);
 app.use('/currency', currency);
 app.use('/productType', productType);
 app.use('/reason', reason);
-app.use('/userType', usertype)
+app.use('/userType', usertype);
 app.use('/tradingType', tradingtype);
+
 
 server.listen(port,function(err){
     if(err) 

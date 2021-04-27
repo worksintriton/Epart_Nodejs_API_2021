@@ -18,7 +18,7 @@ router.post('/login',(req,res)=>{
 
   var login_query ={
       name:'validate-user',
-      text: 'SELECT * FROM public.login where email= $1  AND password= $2 ;',
+      text: 'SELECT * FROM public.users_login where email= $1  AND password= $2 ;',
       values: [email, password]
     }
       pool.query(login_query,(err, resq) => {
@@ -28,7 +28,7 @@ router.post('/login',(req,res)=>{
         } else {
           if (resq.rowCount)
           {
-            res.json({ success: true, msg:"succesfully logged in",token:ticket, data:resq.rows});
+            res.json({ success: true, msg:"succesfully logged in",token:ticket, data:resq.rows[0]});
           }
           else{
             res.json({ success: false, msg: "Incorrect username or password" });
