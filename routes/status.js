@@ -64,7 +64,7 @@ router.get('/getlist',(req,res)=>{
   })  
     
 });
-router.get('/getby_id',(req,res)=>{
+router.get('/getby_id/:id',(req,res)=>{
   var id = req.params.id;
   var status_query ={
       text: 'SELECT *  FROM status WHERE id = $1',
