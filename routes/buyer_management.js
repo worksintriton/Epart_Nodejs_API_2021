@@ -1,8 +1,13 @@
 var express = require('express');
 var router = express.Router();
 var pool = require('../config/db');
+var jwt_decode = require('jwt-decode');
 
 router.post('/create',(req,res)=>{
+  console.log(req.headers.authorization);
+  let token = req.headers.authorization;
+  var decoded = jwt_decode(token);
+  console.log(decoded);
     var name = req.body.name;
     var email = req.body.email;
     var contact = req.body.number;

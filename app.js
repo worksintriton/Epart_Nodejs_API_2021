@@ -12,7 +12,7 @@ app.use(cors());
 app.use(bodyParser.json());
 
 const auth = require('./routes/auth');
-const buyerManagement = require('./routes/buyerMangement');
+const buyerManagement = require('./routes/buyer_management');
 const buyerDetails = require('./routes/buyerDetails');
 const status = require('./routes/status');
 const country = require('./routes/country');
