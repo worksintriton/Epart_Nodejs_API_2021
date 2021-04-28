@@ -1,8 +1,15 @@
 var express = require('express');
 var router = express.Router();
 var pool = require('../config/db');
+var jwt_decode = require('jwt-decode');
+
+var isoDateString = new Date().toISOString();
 
 router.post('/create',(req,res)=>{
+  let token = req.headers.authorization;
+  var decoded = jwt_decode(token);
+  var person_id = decoded.users.id;
+
     var brandName = req.body.brandName;
     var name = req.body.name;
     var ERP_id = req.body.ERP_id;
@@ -12,8 +19,8 @@ router.post('/create',(req,res)=>{
    
 
     var model_query ={
-        text: 'INSERT INTO modelManagement (brandName, name,ERP_id,API_id,status,action) VALUES ($1,$2,$3,$4,$5,$6);',
-        values: [brandName, name, ERP_id, API_id, status, actions]
+        text: 'INSERT INTO modelManagement (brandName, name,ERP_id,API_id,status,created_by, modified_by, created_at, modified_at,action) VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10);',
+        values: [brandName, name, ERP_id, API_id, status, person_id, person_id, isoDateString, isoDateString, actions]
       }
       pool.query (model_query,(err,req)=>{
         if (err) {
@@ -25,6 +32,10 @@ router.post('/create',(req,res)=>{
       })  
 });
 router.put('/update/:id',(req,res)=>{
+  let token = req.headers.authorization;
+  var decoded = jwt_decode(token);
+  var person_id = decoded.users.id;
+
   var brandName = req.body.brandName;
   var name = req.body.name;
   var ERP_id = req.body.ERP_id;
@@ -34,8 +45,8 @@ router.put('/update/:id',(req,res)=>{
   var id = req.params.id;
     
   var model_query ={
-        text: 'UPDATE modelManagement SET brandName=$1 name=$2 ERP_id=$3 API_id=$4 status=$5 action=$6 WHERE id = $7;',
-        values: [brandName, name, ERP_id, API_id, status, actions, id]
+        text: 'UPDATE modelManagement SET brandName=$1 name=$2 ERP_id=$3 API_id=$4 status=$5 modified_by=$6 modified_at=$7 action=$8 WHERE id = $9;',
+        values: [brandName, name, ERP_id, API_id, status, person_id, isoDateString,actions, id]
       }
       pool.query (model_query,(err,req)=>{
         if (err) {

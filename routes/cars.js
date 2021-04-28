@@ -6,23 +6,23 @@ var jwt_decode = require('jwt-decode');
 var isoDateString = new Date().toISOString();
 
 router.post('/create',(req,res)=>{
-  console.log(req.headers.authorization);
   let token = req.headers.authorization;
   var decoded = jwt_decode(token);
+  var person_id = decoded.users.id;
 
-    var name = req.body.name;
-    var email = req.body.email;
-    var contact = req.body.number;
-    var address = req.body.address;
-    var status = req.body.status;
-    var actions = req.body.actions;
-    var person_id = decoded.users.id;
-    
-    var buyer_query ={
-        text: 'INSERT INTO buyermanagement (name,email,number,address, created_by, modified_by, created_at, modified_at, status,actions) VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10);',
-        values: [name, email, contact, address, person_id, person_id, isoDateString, isoDateString, status, actions]
+    var ERP_id = req.body.ERP_id;
+    var brandName = req.body.brandName;
+    var modelName = req.body.modelName;
+    var parameterField = req.body.field;
+    var parameterValue = req.body.value;
+    var actions = req.body.action;
+   
+
+    var cars_query ={
+        text: 'INSERT INTO cars (ERP_id, brandName, modelName, parameterfield, parametervaluestatus,created_by, modified_by, created_at, modified_at,action) VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11);',
+        values: [ERP_id,brandName, modelName, parameterField, parameterValue, status, person_id, person_id, isoDateString, isoDateString, actions]
       }
-      pool.query (buyer_query,(err,req)=>{
+      pool.query (cars_query,(err,req)=>{
         if (err) {
           console.log(err.stack);
           res.json({ success: false, msg: "Error in database" });
@@ -34,21 +34,22 @@ router.post('/create',(req,res)=>{
 router.put('/update/:id',(req,res)=>{
   let token = req.headers.authorization;
   var decoded = jwt_decode(token);
+  var person_id = decoded.users.id;
 
-  var name = req.body.name;
-  var email = req.body.email;
-  var contact = req.body.number;
-  var address = req.body.address;
+  var ERP_id = req.body.ERP_id;
+  var brandName = req.body.brandName;
+  var modelName = req.body.modelName;
+  var parameterField = req.body.field;
+  var parameterValue = req.body.value;
   var status = req.body.status;
   var actions = req.body.action;
   var id = req.params.id;
-  var person_id = decoded.users.id;
-
-  var buyer_query ={
-        text: 'UPDATE buyerManagement SET name=$1 email=$2 number=$3 address=$4 modified_by=$5 modified_at=$6 status=$7 action=$8 WHERE id = $9;',
-        values: [name, email, contact, address, person_id, isoDateString, status, actions, id]
+    
+  var cars_query ={
+        text: 'UPDATE cars SET ERP_id=$1 brandName=$2 modelName=$3 parameterfield=$4 parametervalue=$5 status=$6 modified_by=$7 modified_at=$8 action=$9 WHERE id = $10;',
+        values: [ERP_id, brandName, modelName, parameterField, parameterValue, status, person_id, isoDateString, actions, id]
       }
-      pool.query (buyer_query,(err,req)=>{
+      pool.query (cars_query,(err,req)=>{
         if (err) {
           console.log(err.stack);
           res.json({ success: false, msg: "Error in database" });
@@ -60,11 +61,11 @@ router.put('/update/:id',(req,res)=>{
 });
 router.delete('/delete/:id',(req,res)=>{
     var id = req.params.id;
-    var buyer_query ={
-        text: 'DELETE FROM buyerManagement WHERE id= $1',
+    var cars_query ={
+        text: 'DELETE FROM cars WHERE id= $1',
         values: [id]
       }
-      pool.query (buyer_query,(err,req)=>{
+      pool.query (cars_query,(err,req)=>{
         if (err) {
           console.log(err.stack);
           res.json({ success: false, msg: "Error in database" });
@@ -74,10 +75,10 @@ router.delete('/delete/:id',(req,res)=>{
       })  
 });
 router.get('/getlist',(req,res)=>{
-    var buyer_query ={
-        text: 'SELECT *  FROM buyerManagement',
+    var cars_query ={
+        text: 'SELECT *  FROM cars',
       }
-      pool.query (buyer_query,(err,req)=>{
+      pool.query (cars_query,(err,req)=>{
         if (err) {
           console.log(err.stack);
           res.json({ success: false, msg: "Error in database" });
@@ -89,11 +90,11 @@ router.get('/getlist',(req,res)=>{
 });
 router.get('/getby_id/:id',(req,res)=>{
     var id = req.params.id;
-    var buyer_query ={
-        text: 'SELECT *  FROM buyerManagement WHERE id = $1',
+    var cars_query ={
+        text: 'SELECT *  FROM cars WHERE id = $1',
         values: [id]
       }
-      pool.query (buyer_query,(err,req)=>{
+      pool.query (cars_query,(err,req)=>{
         if (err) {
           console.log(err.stack);
           res.json({ success: false, msg: "Error in database" });

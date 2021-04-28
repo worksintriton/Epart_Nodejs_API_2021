@@ -1,26 +1,20 @@
 var express = require('express');
 var router = express.Router();
 var pool = require('../config/db');
-var jwt_decode = require('jwt-decode');
-
-var isoDateString = new Date().toISOString();
 
 router.post('/create',(req,res)=>{
-  let token = req.headers.authorization;
-  var decoded = jwt_decode(token);
 
-    var name = req.body.name;
-    var ERP_id = req.body.ERP_id;
-    var API_id = req.body.API_id;
+    var categoryCode = req.body.categoryCode;
+    var categoryName = req.body.categoryName;
+    var description = req.body.description;
     var status = req.body.status;
     var actions = req.body.action;
-    var person_id = decoded.users.id;
 
-    var brand_query ={
-        text: 'INSERT INTO brandManagement (name,ERP_id,API_id,status,created_by, modified_by, created_at, modified_at,action) VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9);',
-        values: [name, ERP_id, API_id, status, person_id, person_id, isoDateString, isoDateString, actions]
+    var categoryRequest_query ={
+        text: 'INSERT INTO categoryrequestmanagement (category_code,category_name,description, status,action) VALUES ($1,$2,$3,$4,$5);',
+        values: [categoryCode, categoryName, description, status, actions]
       }
-      pool.query (brand_query,(err,req)=>{
+      pool.query (categoryRequest_query,(err,req)=>{
         if (err) {
           console.log(err.stack);
           res.json({ success: false, msg: "Error in database" });
@@ -30,22 +24,18 @@ router.post('/create',(req,res)=>{
       })  
 });
 router.put('/update/:id',(req,res)=>{
-  let token = req.headers.authorization;
-  var decoded = jwt_decode(token);
-  var person_id = decoded.users.id;
-
-  var name = req.body.name;
-  var ERP_id = req.body.ERP_id;
-  var API_id = req.body.API_id;
-  var status = req.body.status;
-  var actions = req.body.action;
-  var id = req.params.id;
+  
+    var categoryCode = req.body.categoryCode;
+    var categoryName = req.body.categoryName;
+    var description = req.body.description;
+    var status = req.body.status;
+    var actions = req.body.action;
     
-  var brand_query ={
-        text: 'UPDATE brandManagement SET name=$1 ERP_id=$2 API_id=$3 status=$4 modified_by=$5 modified_at=$6 action=$7 WHERE id = $8;',
-        values: [name, ERP_id, API_id, status, person_id, isoDateString, actions, id]
+  var categoryRequest_query ={
+        text: 'UPDATE categoryrequestmanagement SET category_code=$1 category_name=$2 description=$3 status=$4 action=$5 WHERE id = $6;',
+        values: [categoryCode, categoryName, description, status, actions, id]
       }
-      pool.query (brand_query,(err,req)=>{
+      pool.query (categoryRequest_query,(err,req)=>{
         if (err) {
           console.log(err.stack);
           res.json({ success: false, msg: "Error in database" });
@@ -57,11 +47,11 @@ router.put('/update/:id',(req,res)=>{
 });
 router.delete('/delete/:id',(req,res)=>{
     var id = req.params.id;
-    var brand_query ={
-        text: 'DELETE FROM brandManagement WHERE id= $1',
+    var categoryRequest_query ={
+        text: 'DELETE FROM categoryrequestmanagement WHERE id= $1',
         values: [id]
       }
-      pool.query (brand_query,(err,req)=>{
+      pool.query (categoryRequest_query,(err,req)=>{
         if (err) {
           console.log(err.stack);
           res.json({ success: false, msg: "Error in database" });
@@ -71,10 +61,10 @@ router.delete('/delete/:id',(req,res)=>{
       })  
 });
 router.get('/getlist',(req,res)=>{
-    var brand_query ={
-        text: 'SELECT *  FROM brandManagement',
+    var categoryRequest_query ={
+        text: 'SELECT *  FROM categoryrequestmanagement',
       }
-      pool.query (brand_query,(err,req)=>{
+      pool.query (categoryRequest_query,(err,req)=>{
         if (err) {
           console.log(err.stack);
           res.json({ success: false, msg: "Error in database" });
@@ -86,11 +76,11 @@ router.get('/getlist',(req,res)=>{
 });
 router.get('/getby_id/:id',(req,res)=>{
     var id = req.params.id;
-    var brand_query ={
-        text: 'SELECT *  FROM brandManagement WHERE id = $1',
+    var categoryRequest_query ={
+        text: 'SELECT *  FROM categoryrequestmanagement WHERE id = $1',
         values: [id]
       }
-      pool.query (brand_query,(err,req)=>{
+      pool.query (categoryRequest_query,(err,req)=>{
         if (err) {
           console.log(err.stack);
           res.json({ success: false, msg: "Error in database" });

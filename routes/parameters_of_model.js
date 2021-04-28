@@ -1,8 +1,15 @@
 var express = require('express');
 var router = express.Router();
 var pool = require('../config/db');
+var jwt_decode = require('jwt-decode');
+
+var isoDateString = new Date().toISOString();
 
 router.post('/create',(req,res)=>{
+  let token = req.headers.authorization;
+  var decoded = jwt_decode(token);
+  var person_id = decoded.users.id;
+
     var brandName = req.body.brandName;
     var modelName = req.body.modelName;
     var parameterNumber = req.body.parameterNumber;
@@ -11,8 +18,8 @@ router.post('/create',(req,res)=>{
    
 
     var modelParameter_query ={
-        text: 'INSERT INTO parameterModelManagement (brandName, modelName, parameterNumber,status,action) VALUES ($1,$2,$3,$4,$5);',
-        values: [brandName, modelName, parameterNumber, status, actions]
+        text: 'INSERT INTO parameterModelManagement (brandName, modelName, parameterNumber,status,created_by, modified_by, created_at, modified_at,action) VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9);',
+        values: [brandName, modelName, parameterNumber, status, person_id, person_id, isoDateString, isoDateString, actions]
       }
       pool.query (modelParameter_query,(err,req)=>{
         if (err) {
@@ -24,6 +31,10 @@ router.post('/create',(req,res)=>{
       })  
 });
 router.put('/update/:id',(req,res)=>{
+  let token = req.headers.authorization;
+  var decoded = jwt_decode(token);
+  var person_id = decoded.users.id;
+
   var brandName = req.body.brandName;
   var modelName = req.body.modelName;
   var parameterNumber = req.body.parameterNumber;
@@ -32,8 +43,8 @@ router.put('/update/:id',(req,res)=>{
   var id = req.params.id;
     
   var modelParameter_query ={
-        text: 'UPDATE parameterModelManagement SET brandName=$1 modelName=$2 parameterNumber=$3 status=$4 action=$5 WHERE id = $6;',
-        values: [brandName, modelName, parameterNumber, status, actions, id]
+        text: 'UPDATE parameterModelManagement SET brandName=$1 modelName=$2 parameterNumber=$3 status=$4 modified_by=$5 modified_at=$6 action=$7 WHERE id = $8;',
+        values: [brandName, modelName, parameterNumber, status, person_id, isoDateString, actions, id]
       }
       pool.query (modelParameter_query,(err,req)=>{
         if (err) {
