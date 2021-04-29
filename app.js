@@ -24,6 +24,26 @@ const productType = require('./routes/product-type');
 const reason = require('./routes/reason');
 const usertype = require('./routes/user_type');
 const tradingtype = require('./routes/tradingType');
+const cars = require('./routes/cars');
+const groupManagement = require('./routes/group_management');
+const subGroupManagement = require('./routes/subgroup_management');
+const subNodeManagement = require('./routes/subNode_management');
+const partsManagement = require('./routes/parts_management');
+const commissionManagement = require('./routes/commission_management');
+const orderManagement = require('./routes/order_management');
+const paymentManagement = require('./routes/payment_management');
+const categoryRequestManagement = require('./routes/categoryRequest_management');
+const buyerSaveQuotes = require('./routes/buyerSaved_quotes');
+const newsLetterManagement = require('./routes/newsletter_management');
+const notificationManagement = require('./routes/notification_management');
+const ratingReview = require('./routes/ratingReviews');
+const partsRequest = require('./routes/parts_request_outOfStock');
+
+const makeOfferManagement = require('./routes/makeOffer_management');
+const auditTrail = require('./routes/audit_trail');
+const staticPage = require('./routes/static_pages');
+const subscription = require('./routes/subscription_management');
+const roles = require('./routes/roles');
 
 app.use('/auth', auth);
 app.use('/buyer_management', buyerManagement);
@@ -38,7 +58,25 @@ app.use('/productType', productType);
 app.use('/reason', reason);
 app.use('/userType', usertype);
 app.use('/tradingType', tradingtype);
-
+app.use('/cars', cars);
+app.use('/group_management', groupManagement);
+app.use('/sub_group_management', subGroupManagement);
+app.use('/subNode_management', subNodeManagement);
+app.use('/parts_management', partsManagement);
+app.use('/commission_management', commissionManagement);
+app.use('/order_management', orderManagement);
+app.use('/payment_management', paymentManagement);
+app.use('/category_request_management', categoryRequestManagement);
+app.use('/buyer_save_quotes', buyerSaveQuotes);
+app.use('/newsletter_management', newsLetterManagement);
+app.use('/notification_management', notificationManagement);
+app.use('/rating_review', ratingReview);
+app.use('/parts_request_outOfStock', partsRequest);
+app.use('/make_offer_management', makeOfferManagement);
+app.use('/audit_trail', auditTrail);
+app.use('/static_page', staticPage);
+app.use('/subscription', subscription);
+app.use('/roles', roles);
 
 server.listen(port,function(err){
     if(err) 
