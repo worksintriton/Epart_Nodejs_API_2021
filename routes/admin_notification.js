@@ -1,21 +1,24 @@
 var express = require('express');
 var router = express.Router();
 var pool = require('../config/db');
+var jwt_decode = require('jwt-decode');
+
+var isoDateString = new Date().toISOString();
 
 router.post('/create',(req,res)=>{
+  let token = req.headers.authorization;
+  var decoded = jwt_decode(token);
 
-    var moduleName = req.body.moduleName;
-    var fieldName = req.body.fieldName;
-    var values = req.body.values;
-    var userName = req.body.userName;
-    var timeStamp = req.body.timeStamp;
-    var actions = req.body.action;
+    var title = req.body.title;
+    var description = req.body.description;
+    var imagepath = req.body.imagepath; 
+    var person_id = decoded.users.id;
 
-    var auditTrail_query ={
-        text: 'INSERT INTO audit_trail (module_name,field_name,values, user_name, time_stamp, action) VALUES ($1,$2,$3,$4,$5,$6);',
-        values: [moduleName, fieldName, values, userName, timeStamp, actions]
+    var adminNotification_query ={
+        text: 'INSERT INTO admin_notification (title, description, imagepath, user_id, date_time) VALUES ($1,$2,$3,$4,$5);',
+        values: [title, description, imagepath, person_id, isoDateString]
       }
-      pool.query (auditTrail_query,(err,req)=>{
+      pool.query (adminNotification_query,(err,req)=>{
         if (err) {
           console.log(err.stack);
           res.json({ success: false, msg: "Error in database" });
@@ -25,18 +28,18 @@ router.post('/create',(req,res)=>{
       })  
 });
 router.put('/update/:id',(req,res)=>{
+  let token = req.headers.authorization;
+  var decoded = jwt_decode(token);
+  var person_id = decoded.users.id;
   
     var name = req.body.name;
-    var userType = req.body.userType;
-    var reg_status = req.body.reg_status;
-    var email = req.body.email;
-    var actions = req.body.action;
+    var access = req.body.access;
     
-  var auditTrail_query ={
-        text: 'UPDATE audit_trail SET module_name=$1 field_name=$2 values=$3 user_name=$4 time_stamp=$5 action=$6 WHERE id = $7;',
-        values: [moduleName, fieldName, values, userName, timeStamp, actions, id]
+  var adminNotification_query ={
+        text: 'UPDATE admin_notification SET title=$1 description=$2 imagepath=$3 user_id=$4 date_time=$5 WHERE id = $6;',
+        values: [title, description, imagepath, person_id, isoDateString, id]
       }
-      pool.query (auditTrail_query,(err,req)=>{
+      pool.query (adminNotification_query,(err,req)=>{
         if (err) {
           console.log(err.stack);
           res.json({ success: false, msg: "Error in database" });
@@ -48,11 +51,11 @@ router.put('/update/:id',(req,res)=>{
 });
 router.delete('/delete/:id',(req,res)=>{
     var id = req.params.id;
-    var auditTrail_query ={
-        text: 'DELETE FROM audit_trail WHERE id= $1',
+    var adminNotification_query ={
+        text: 'DELETE FROM admin_notification WHERE id= $1',
         values: [id]
       }
-      pool.query (auditTrail_query,(err,req)=>{
+      pool.query (adminNotification_query,(err,req)=>{
         if (err) {
           console.log(err.stack);
           res.json({ success: false, msg: "Error in database" });
@@ -62,10 +65,10 @@ router.delete('/delete/:id',(req,res)=>{
       })  
 });
 router.get('/getlist',(req,res)=>{
-    var auditTrail_query ={
-        text: 'SELECT *  FROM audit_trail',
+    var adminNotification_query ={
+        text: 'SELECT *  FROM admin_notification',
       }
-      pool.query (auditTrail_query,(err,req)=>{
+      pool.query (adminNotification_query,(err,req)=>{
         if (err) {
           console.log(err.stack);
           res.json({ success: false, msg: "Error in database" });
@@ -77,11 +80,11 @@ router.get('/getlist',(req,res)=>{
 });
 router.get('/getby_id/:id',(req,res)=>{
     var id = req.params.id;
-    var auditTrail_query ={
-        text: 'SELECT *  FROM audit_trail WHERE id = $1',
+    var adminNotification_query ={
+        text: 'SELECT *  FROM admin_notification WHERE id = $1',
         values: [id]
       }
-      pool.query (auditTrail_query,(err,req)=>{
+      pool.query (adminNotification_query,(err,req)=>{
         if (err) {
           console.log(err.stack);
           res.json({ success: false, msg: "Error in database" });

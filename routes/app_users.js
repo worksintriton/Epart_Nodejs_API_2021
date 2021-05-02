@@ -4,18 +4,18 @@ var pool = require('../config/db');
 
 router.post('/create',(req,res)=>{
 
-    var moduleName = req.body.moduleName;
-    var fieldName = req.body.fieldName;
-    var values = req.body.values;
+    var email = req.body.email;
+    var password = req.body.password;
+    var contact = req.body.contact;
+    var userType = req.body.userType;
     var userName = req.body.userName;
-    var timeStamp = req.body.timeStamp;
-    var actions = req.body.action;
+    var firebaseToken = req.body.firebaseToken;
 
-    var auditTrail_query ={
-        text: 'INSERT INTO audit_trail (module_name,field_name,values, user_name, time_stamp, action) VALUES ($1,$2,$3,$4,$5,$6);',
-        values: [moduleName, fieldName, values, userName, timeStamp, actions]
+    var appUser_query ={
+        text: 'INSERT INTO app_user (email,password, contact, userType, userName, firebaseToken) VALUES ($1,$2,$3,$4,$5,$6);',
+        values: [email, password, contact, userType, userName, firebaseToken]
       }
-      pool.query (auditTrail_query,(err,req)=>{
+      pool.query (appUser_query,(err,req)=>{
         if (err) {
           console.log(err.stack);
           res.json({ success: false, msg: "Error in database" });
@@ -32,11 +32,11 @@ router.put('/update/:id',(req,res)=>{
     var email = req.body.email;
     var actions = req.body.action;
     
-  var auditTrail_query ={
-        text: 'UPDATE audit_trail SET module_name=$1 field_name=$2 values=$3 user_name=$4 time_stamp=$5 action=$6 WHERE id = $7;',
-        values: [moduleName, fieldName, values, userName, timeStamp, actions, id]
+  var appUser_query ={
+        text: 'UPDATE app_user SET email=$1 password=$2 contact=$3 userType=$4 userName=$5 firebaseToken=$6 WHERE id = $7;',
+        values: [email, password, contact, userType, userName, firebaseToken]
       }
-      pool.query (auditTrail_query,(err,req)=>{
+      pool.query (appUser_query,(err,req)=>{
         if (err) {
           console.log(err.stack);
           res.json({ success: false, msg: "Error in database" });
@@ -48,11 +48,11 @@ router.put('/update/:id',(req,res)=>{
 });
 router.delete('/delete/:id',(req,res)=>{
     var id = req.params.id;
-    var auditTrail_query ={
-        text: 'DELETE FROM audit_trail WHERE id= $1',
+    var appUser_query ={
+        text: 'DELETE FROM app_user WHERE id= $1',
         values: [id]
       }
-      pool.query (auditTrail_query,(err,req)=>{
+      pool.query (appUser_query,(err,req)=>{
         if (err) {
           console.log(err.stack);
           res.json({ success: false, msg: "Error in database" });
@@ -62,10 +62,10 @@ router.delete('/delete/:id',(req,res)=>{
       })  
 });
 router.get('/getlist',(req,res)=>{
-    var auditTrail_query ={
-        text: 'SELECT *  FROM audit_trail',
+    var appUser_query ={
+        text: 'SELECT *  FROM app_user',
       }
-      pool.query (auditTrail_query,(err,req)=>{
+      pool.query (appUser_query,(err,req)=>{
         if (err) {
           console.log(err.stack);
           res.json({ success: false, msg: "Error in database" });
@@ -77,11 +77,11 @@ router.get('/getlist',(req,res)=>{
 });
 router.get('/getby_id/:id',(req,res)=>{
     var id = req.params.id;
-    var auditTrail_query ={
-        text: 'SELECT *  FROM audit_trail WHERE id = $1',
+    var appUser_query ={
+        text: 'SELECT *  FROM app_user WHERE id = $1',
         values: [id]
       }
-      pool.query (auditTrail_query,(err,req)=>{
+      pool.query (appUser_query,(err,req)=>{
         if (err) {
           console.log(err.stack);
           res.json({ success: false, msg: "Error in database" });

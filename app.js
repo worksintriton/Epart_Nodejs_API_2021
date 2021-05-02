@@ -44,6 +44,10 @@ const auditTrail = require('./routes/audit_trail');
 const staticPage = require('./routes/static_pages');
 const subscription = require('./routes/subscription_management');
 const roles = require('./routes/roles');
+const adminUser = require('./routes/admin_user');
+const adminRole = require('./routes/adminRole')
+const adminNotification = require('./routes/admin_notification')
+const appUser = require('./routes/app_users')
 
 app.use('/auth', auth);
 app.use('/buyer_management', buyerManagement);
@@ -75,8 +79,12 @@ app.use('/parts_request_outOfStock', partsRequest);
 app.use('/make_offer_management', makeOfferManagement);
 app.use('/audit_trail', auditTrail);
 app.use('/static_page', staticPage);
-app.use('/subscription', subscription);
 app.use('/roles', roles);
+app.use('/subscription', subscription);
+app.use('/adminUser', adminUser);
+app.use('/adminRole', adminRole);
+app.use('/adminNotification', adminNotification);
+app.use('/appUser', appUser);
 
 server.listen(port,function(err){
     if(err) 

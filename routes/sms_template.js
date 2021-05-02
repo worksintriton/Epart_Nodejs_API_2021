@@ -1,21 +1,25 @@
 var express = require('express');
 var router = express.Router();
 var pool = require('../config/db');
+var jwt_decode = require('jwt-decode');
+
+var isoDateString = new Date().toISOString();
 
 router.post('/create',(req,res)=>{
+  console.log(req.headers.authorization);
+  let token = req.headers.authorization;
+  var decoded = jwt_decode(token);
+  var person_id = decoded.users.id;
 
     var moduleName = req.body.moduleName;
-    var fieldName = req.body.fieldName;
-    var values = req.body.values;
-    var userName = req.body.userName;
-    var timeStamp = req.body.timeStamp;
-    var actions = req.body.action;
-
-    var auditTrail_query ={
-        text: 'INSERT INTO audit_trail (module_name,field_name,values, user_name, time_stamp, action) VALUES ($1,$2,$3,$4,$5,$6);',
-        values: [moduleName, fieldName, values, userName, timeStamp, actions]
+    var title = req.body.title;
+    var actions = req.body.actions;
+    
+    var smsTemplate_query ={
+        text: 'INSERT INTO smstemplate (module_name, title, actions, created_by, modified_by, created_at, modified_at) VALUES ($1,$2,$3,$4,$5,$6,$7);',
+        values: [moduleName, title, actions, person_id, person_id, isoDateString, isoDateString]
       }
-      pool.query (auditTrail_query,(err,req)=>{
+      pool.query (smsTemplate_query,(err,req)=>{
         if (err) {
           console.log(err.stack);
           res.json({ success: false, msg: "Error in database" });
@@ -25,18 +29,21 @@ router.post('/create',(req,res)=>{
       })  
 });
 router.put('/update/:id',(req,res)=>{
+  let token = req.headers.authorization;
+  var decoded = jwt_decode(token);
+  var person_id = decoded.users.id;
+
+  var moduleName = req.body.moduleName;
+  var title = req.body.title;
+  var actions = req.body.actions;
+  var id = req.params.id;
   
-    var name = req.body.name;
-    var userType = req.body.userType;
-    var reg_status = req.body.reg_status;
-    var email = req.body.email;
-    var actions = req.body.action;
-    
-  var auditTrail_query ={
-        text: 'UPDATE audit_trail SET module_name=$1 field_name=$2 values=$3 user_name=$4 time_stamp=$5 action=$6 WHERE id = $7;',
-        values: [moduleName, fieldName, values, userName, timeStamp, actions, id]
+
+  var smsTemplate_query ={
+        text: 'UPDATE smstemplate SET module_name=$1 title=$2 action=$3 modified_by=$4 modified_at=$5  WHERE id = $6;',
+        values: [moduleName, title, actions, person_id, isoDateString, id]
       }
-      pool.query (auditTrail_query,(err,req)=>{
+      pool.query (smsTemplate_query,(err,req)=>{
         if (err) {
           console.log(err.stack);
           res.json({ success: false, msg: "Error in database" });
@@ -48,11 +55,11 @@ router.put('/update/:id',(req,res)=>{
 });
 router.delete('/delete/:id',(req,res)=>{
     var id = req.params.id;
-    var auditTrail_query ={
-        text: 'DELETE FROM audit_trail WHERE id= $1',
+    var smsTemplate_query ={
+        text: 'DELETE FROM smstemplate WHERE id= $1',
         values: [id]
       }
-      pool.query (auditTrail_query,(err,req)=>{
+      pool.query (smsTemplate_query,(err,req)=>{
         if (err) {
           console.log(err.stack);
           res.json({ success: false, msg: "Error in database" });
@@ -62,10 +69,10 @@ router.delete('/delete/:id',(req,res)=>{
       })  
 });
 router.get('/getlist',(req,res)=>{
-    var auditTrail_query ={
-        text: 'SELECT *  FROM audit_trail',
+    var smsTemplate_query ={
+        text: 'SELECT *  FROM smstemplate',
       }
-      pool.query (auditTrail_query,(err,req)=>{
+      pool.query (smsTemplate_query,(err,req)=>{
         if (err) {
           console.log(err.stack);
           res.json({ success: false, msg: "Error in database" });
@@ -77,11 +84,11 @@ router.get('/getlist',(req,res)=>{
 });
 router.get('/getby_id/:id',(req,res)=>{
     var id = req.params.id;
-    var auditTrail_query ={
-        text: 'SELECT *  FROM audit_trail WHERE id = $1',
+    var smsTemplate_query ={
+        text: 'SELECT *  FROM smstemplate WHERE id = $1',
         values: [id]
       }
-      pool.query (auditTrail_query,(err,req)=>{
+      pool.query (smsTemplate_query,(err,req)=>{
         if (err) {
           console.log(err.stack);
           res.json({ success: false, msg: "Error in database" });
@@ -92,4 +99,4 @@ router.get('/getby_id/:id',(req,res)=>{
       })  
 });
 
-module.exports = router;
+module.exports = router;    
