@@ -12,6 +12,7 @@ app.use(cors());
 app.use(bodyParser.json());
 
 const auth = require('./routes/auth');
+const adminLogin = require('./routes/admin_login');
 const buyerManagement = require('./routes/buyer_management');
 const buyerDetails = require('./routes/buyerDetails');
 const status = require('./routes/status');
@@ -50,6 +51,7 @@ const adminNotification = require('./routes/admin_notification')
 const appUser = require('./routes/app_users')
 
 app.use('/auth', auth);
+app.use('/adminLogin', adminLogin);
 app.use('/buyer_management', buyerManagement);
 app.use('/buyer_details', buyerDetails);
 app.use('/status', status);

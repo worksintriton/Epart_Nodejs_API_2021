@@ -11,7 +11,7 @@ router.post('/create',(req,res)=>{
     var employeeId = req.body.employeeId;
 
     var adminUser_query ={
-        text: 'INSERT INTO admin_user (email,password,designation, contact, employeeId) VALUES ($1,$2,$3,$4,$5);',
+        text: 'INSERT INTO admin_user (email,password,designation, contact, employee_id) VALUES ($1,$2,$3,$4,$5);',
         values: [email, password, designation, contact, employeeId]
       }
       pool.query (adminUser_query,(err,req)=>{
@@ -32,7 +32,7 @@ router.put('/update/:id',(req,res)=>{
     var actions = req.body.action;
     
   var adminUser_query ={
-        text: 'UPDATE admin_user SET email=$1 password=$2 designation=$3 contact=$4 employeeId=$5 WHERE id = $6;',
+        text: 'UPDATE admin_user SET email=$1 password=$2 designation=$3 contact=$4 employee_id=$5 WHERE id = $6;',
         values: [email, password, designation, contact, employeeId, id]
       }
       pool.query (adminUser_query,(err,req)=>{
