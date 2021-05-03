@@ -2,19 +2,18 @@ var express = require('express');
 var router = express.Router();
 var jwt = require('jsonwebtoken');
 var pool = require('../config/db');
-var multer = require('multer');
 
 router.post('/login',(req,res)=>{
   var email = req.body.email;
   var password = req.body.password;
   
 
-  var login_query ={
-      name:'validate-user',
-      text: 'SELECT * FROM admin_user as l where email= $1  AND password= $2 ;',
+  var adminLogin_query ={
+      name:'validate-admin',
+      text: 'SELECT * FROM admin_user where email= $1  AND password= $2 ;',
       values: [email, password]
     }
-      pool.query(login_query,(err, resq) => {
+      pool.query(adminLogin_query,(err, resq) => {
         if (err) {
           console.log(err.stack);
           res.json({ success: false, msg: "Error in database" });
