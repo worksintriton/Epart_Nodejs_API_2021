@@ -3,17 +3,21 @@ var router = express.Router();
 var pool = require('../config/db');
 
 router.post('/create',(req,res)=>{
-    var role = req.body.name;
+    var role_name = req.body.role_name;
+    var created_at = new Date();
+    var modified_at = new Date();
+    var created_by = 1;
+    var modified_by = 1;
     var role_query ={
-        text: 'INSERT INTO role (name) VALUES ($1);',
-        values: [role]
+        text: 'INSERT INTO role (role_name,created_at,modified_at,created_by,modified_by) VALUES ($1,$2,$3,$4,$5);',
+        values: [role_name,created_at,modified_at,created_by,modified_by]
       }
       pool.query (role_query,(err,req)=>{
         if (err) {
           console.log(err.stack);
           res.json({ success: false, msg: "Error in database" });
         } else {
-          res.json({success: true, msg:"succesfully created"});
+          res.json({success: true, msg:"New Role Created Successfully", data:req.rows});
         }
       })  
 });

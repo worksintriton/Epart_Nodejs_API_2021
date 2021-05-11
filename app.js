@@ -22,6 +22,7 @@ const payout = require('./routes/payout-schdule');
 const currency = require('./routes/currency');
 const productType = require('./routes/product-type');
 const reason = require('./routes/reason');
+const role = require('./routes/role');
 const usertype = require('./routes/user_type');
 const tradingtype = require('./routes/tradingType');
 
