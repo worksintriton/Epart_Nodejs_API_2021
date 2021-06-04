@@ -69,7 +69,11 @@ router.get('/getlist', (req, res) => {
       console.log(err.stack);
       res.json({ success: false, msg: "Error in database", data: [] });
     } else {
-      res.json({ success: true, msg: "Loadind State", data: req.rows });
+      if (req.rows.length > 0) {
+        res.json({ success: true, msg: "Loadind State", data: req.rows });
+      } else {
+        res.json({ success: true, msg: "No data Found", data: [] });
+      }
     }
   })
 
